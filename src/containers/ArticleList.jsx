@@ -6,7 +6,6 @@ import AppBar from 'material-ui/AppBar'
 import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
 import { List, ListItem } from 'material-ui/List'
-import uuid from 'uuid/v1'
 
 import { fetchArticleList } from '../actions/index'
 
@@ -14,25 +13,27 @@ class ArticleList extends React.Component {
 
   constructor(props) {
     super(props)
+    console.log(props)
     this.onBack = this.onBack.bind(this)
-    this.state = {
-      uuid: uuid()
-    }
+    const { publication } = this.props.match.params
+    this.key = publication
   }
 
   componentWillMount() {
-    this.props.fetchArticleList(this.props.match, this.state.uuid)
+    const articleList = this.props.articleList
+    if (!articleList || articleList.key !== this.key) {
+      this.props.fetchArticleList(this.props.match, this.key)
+    }
   }
 
   renderList() {
     const articleList = this.props.articleList
-    if (!articleList || articleList.uuid !== this.state.uuid) {
+    if (!articleList || articleList.key !== this.key) {
       return (
         <div></div>
       )
     }
-    const items = articleList.data.slice(1)
-    return items.map(topic => {
+    return articleList.data.slice(1).map(topic => {
       return (
         <ListItem
           key={topic.id}

@@ -14,12 +14,12 @@ const cache = LRU({
   maxAge: ONE_DAY_IN_MSECS
 })
 
-function fetchData(route, uuid = null) {
+function fetchData(route, key = null) {
   const url = API_URL + route
   const data = cache.get(API_URL + route)
   if (data) {
     console.log(`cache hit for: ${route}`)
-    return Promise.resolve({ data, uuid })
+    return Promise.resolve({ data, key })
   }
 
   console.log(`cache miss for: ${route}`)
@@ -27,7 +27,7 @@ function fetchData(route, uuid = null) {
     .then(res => {
       const data = res.data
       cache.set(url, data)
-      return { data, uuid }
+      return { data, key }
     })
 }
 
@@ -38,16 +38,16 @@ export function fetchPublicationList() {
   }
 }
 
-export function fetchArticleList({ params }, uuid) {
+export function fetchArticleList({ params }, key) {
   return {
     type: ARTICLE_LIST_FETCHED,
-    payload: fetchData(`/topic/${params.publication}`, uuid)
+    payload: fetchData(`/topic/${params.publication}`, key)
   }
 }
 
-export function fetchArticle({ params }, uuid) {
+export function fetchArticle({ params }, key) {
   return {
     type: ARTICLE_FETCHED,
-    payload: fetchData(`/topic/${params.publication}/${params.article}`, uuid)
+    payload: fetchData(`/topic/${params.publication}/${params.article}`, key)
   }
 }

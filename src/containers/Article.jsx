@@ -6,7 +6,6 @@ import AppBar from 'material-ui/AppBar'
 import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
 import Paper from 'material-ui/Paper'
-import uuid from 'uuid/v1'
 
 import { fetchArticle } from '../actions/index'
 
@@ -23,21 +22,20 @@ class Article extends React.Component {
   constructor(props) {
     super(props)
     this.onBack = this.onBack.bind(this)
-    this.state = {
-      uuid: uuid()
-    }
+    const { publication, article } = this.props.match.params
+    this.key = `${publication}.${article}`
   }
 
   componentDidMount() {
-    this.props.fetchArticle(this.props.match, this.state.uuid)
-  }
-
-  createHtml() {
-    return { __html: this.props.article.data.html }
+    const article = this.props.article
+    if (!article || article.key !== this.key) {
+      this.props.fetchArticle(this.props.match, this.key)
+    }
   }
 
   render() {
-    if (!this.props.article || this.props.article.uuid !== this.state.uuid) {
+    const article = this.props.article
+    if (!article || article.key !== this.key) {
       return (
         <div></div>
       )
@@ -53,7 +51,9 @@ class Article extends React.Component {
           }
         />
         <Paper style={style} zDepth={1}>
-          <div dangerouslySetInnerHTML={this.createHtml()} />
+          <div dangerouslySetInnerHTML={(
+            { __html: article.data.html }
+          )} />
         </Paper>
       </div>
     )
