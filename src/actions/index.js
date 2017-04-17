@@ -1,9 +1,9 @@
 import axios from 'axios'
 import LRU from 'lru-cache'
 
-export const PUBLICATION_LIST_FETCHED = 'PUBLICATION_LIST_FETCHED'
-export const ARTICLE_LIST_FETCHED = 'ARTICLE_LIST_FETCHED'
-export const ARTICLE_FETCHED = 'ARTICLE_FETCHED'
+export const FETCH_PUBLICATION_LIST = 'FETCH_PUBLICATION_LIST'
+export const FETCH_ARTICLE_LIST = 'FETCH_ARTICLE_LIST'
+export const FETCH_ARTICLE = 'FETCH_ARTICLE'
 
 const API_URL = 'http://godutch.taalmap.nl/api'
 
@@ -33,21 +33,21 @@ function fetchData(route, key = null) {
 
 export function fetchPublicationList() {
   return {
-    type: PUBLICATION_LIST_FETCHED,
+    type: FETCH_PUBLICATION_LIST,
     payload: fetchData(`/topic`)
   }
 }
 
 export function fetchArticleList({ params }, key) {
   return {
-    type: ARTICLE_LIST_FETCHED,
+    type: FETCH_ARTICLE_LIST,
     payload: fetchData(`/topic/${params.publication}`, key)
   }
 }
 
 export function fetchArticle({ params }, key) {
   return {
-    type: ARTICLE_FETCHED,
+    type: FETCH_ARTICLE,
     payload: fetchData(`/topic/${params.publication}/${params.article}`, key)
   }
 }

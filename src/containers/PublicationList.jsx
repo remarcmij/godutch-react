@@ -3,11 +3,17 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import AppBar from 'material-ui/AppBar'
-import { List, ListItem } from 'material-ui/List'
+import { List } from 'material-ui/List'
 
+import PublicationListItem from '../components/PublicationListItem'
 import { fetchPublicationList } from '../actions/index'
 
 class PublicationList extends React.Component {
+
+  constructor(props) {
+    super(props)
+    this.onTap = this.onTap.bind(this)
+  }
 
   componentDidMount() {
     if (!this.props.publicationList) {
@@ -21,19 +27,12 @@ class PublicationList extends React.Component {
         <div></div>
       )
     }
-    return this.props.publicationList.data.map(topic => {
-      return (
-        <ListItem
-          key={topic.id}
-          onTouchTap={() => this.onItemTap(topic)}
-          primaryText={topic.title}
-          secondaryText={
-            <p>{topic.subtitle}</p>
-          }
-          secondaryTextLines={2}
-        />
-      )
-    })
+    return this.props.publicationList.data.map(topic => (
+      <PublicationListItem
+        key={topic.id}
+        topic={topic}
+        onTap={this.onTap} />
+    ))
   }
 
   render() {
@@ -50,7 +49,7 @@ class PublicationList extends React.Component {
     )
   }
 
-  onItemTap(topic) {
+  onTap(topic) {
     this.props.history.push(`/articles/${topic.publication}`)
   }
 }

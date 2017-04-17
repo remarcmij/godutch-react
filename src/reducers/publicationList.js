@@ -1,8 +1,11 @@
-import { PUBLICATION_LIST_FETCHED } from '../actions/index'
+import { FETCH_PUBLICATION_LIST } from '../actions/index'
 
-export default function (state = null, { type, payload }) {
+export default (state = null, { type, payload }) => {
+  console.log(state)
   switch (type) {
-    case PUBLICATION_LIST_FETCHED: return payload
-    default: return state
+    case FETCH_PUBLICATION_LIST:
+      return payload
+    default:
+      return state
   }
 }

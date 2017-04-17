@@ -13,7 +13,6 @@ class ArticleList extends React.Component {
 
   constructor(props) {
     super(props)
-    console.log(props)
     this.onBack = this.onBack.bind(this)
     const { publication } = this.props.match.params
     this.key = publication
