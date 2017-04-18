@@ -45,6 +45,7 @@ class ArticleList extends Component {
     return (
       <div>
         <AppBar
+          className="AppBar"
           title={<span>Articles</span>}
           iconElementLeft={
             <IconButton onTouchTap={this.onBack}>

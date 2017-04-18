@@ -41,6 +41,7 @@ class PublicationList extends Component {
     return (
       <div>
         <AppBar
+          className="AppBar"
           title="Go Dutch"
           iconClassNameRight="muidocs-icon-navigation-expand-more"
         />

@@ -8,6 +8,7 @@ import FontIcon from 'material-ui/FontIcon'
 import Paper from 'material-ui/Paper'
 
 import { fetchArticle } from '../actions/index'
+import speechService from '../services/speechService'
 
 const style = {
   fontFamily: '-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif',
@@ -44,6 +45,7 @@ class Article extends Component {
     return (
       <div>
         <AppBar
+          className="AppBar"
           title={<span>Article</span>}
           iconElementLeft={
             <IconButton onTouchTap={this.onBack}>
@@ -72,6 +74,15 @@ class Article extends Component {
 
   onClick(ev) {
     console.log(ev)
+    if (speechService.isSpeechSynthesisSupported) {
+      const target = ev.target
+      if (target.tagName === 'SPAN') {
+        ev.preventDefault()
+        ev.stopPropagation()
+        const text = target.innerText.trim()
+        speechService.speak(text, this.topic.targetLang)
+      }
+    }
   }
 
 }
