@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -8,33 +8,30 @@ import FontIcon from 'material-ui/FontIcon'
 import { List } from 'material-ui/List'
 
 import TopicListItem from '../components/TopicListItem'
-import { fetchArticleList } from '../actions/index'
+import { fetchPublicationTopics } from '../actions/index'
 
-class ArticleList extends React.Component {
+class ArticleList extends Component {
 
   constructor(props) {
     super(props)
-    const { publication } = this.props.match.params
-    this.key = publication
     this.onBack = this.onBack.bind(this)
     this.onTouchTap = this.onTouchTap.bind(this)
+    this.topics = this.props.publicationTopics[this.publication]
   }
 
   componentWillMount() {
-    const articleList = this.props.articleList
-    if (!articleList || articleList.key !== this.key) {
-      this.props.fetchArticleList(this.props.match, this.key)
+    if (!this.topics) {
+      this.props.fetchPublicationTopics(this.props.match.params)
     }
   }
 
   renderList() {
-    const { articleList } = this.props
-    if (!articleList || articleList.key !== this.key) {
+    if (!this.topics) {
       return (
         <div></div>
       )
     }
-    return articleList.data.slice(1).map(topic => (
+    return this.topics.slice(1).map(topic => (
       <TopicListItem
         key={topic.id}
         topic={topic}
@@ -43,6 +40,8 @@ class ArticleList extends React.Component {
   }
 
   render() {
+    const { publication } = this.props.match.params
+    this.topics = this.props.publicationTopics[publication]
     return (
       <div>
         <AppBar
@@ -53,7 +52,7 @@ class ArticleList extends React.Component {
             </IconButton>
           }
         />
-        <List>
+        <List dir={this.getDir()}>
           {this.renderList()}
         </List>
       </div>
@@ -67,24 +66,32 @@ class ArticleList extends React.Component {
   onTouchTap(topic) {
     this.props.history.push(`/articles/${topic.publication}/${topic.article}`)
   }
+
+  getDir() {
+    if (!this.topics) {
+      return 'ltr'
+    }
+    const firstTopic = this.topics[0]
+    return firstTopic.baseLang.startsWith('ar') || firstTopic.targetLang.startsWith('ar') ? 'rtl' : 'ltr'
+  }
 }
 
 ArticleList.propTypes = {
-  articleList: PropTypes.object,
-  fetchArticleList: PropTypes.func,
+  publicationTopics: PropTypes.object,
+  fetchPublicationTopics: PropTypes.func,
   match: PropTypes.object,
   history: PropTypes.object
 }
 
 function mapStateToProps(state) {
   return {
-    articleList: state.articleList,
-    fetchArticleList: state.fetchArticleList
+    publicationTopics: state.publicationTopics,
+    fetchPublicationTopics: state.fetchPublicationTopics
   }
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ fetchArticleList }, dispatch)
+  return bindActionCreators({ fetchPublicationTopics }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArticleList)

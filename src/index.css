@@ -6,3 +6,8 @@ body {
     line-height: 1.5;
     color: #373a3c;
 }
+
+strong>span {
+    cursor: pointer;
+    color: #3F51B5;
+}

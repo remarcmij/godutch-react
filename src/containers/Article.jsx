@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -17,25 +17,26 @@ const style = {
   padding: '16px'
 }
 
-class Article extends React.Component {
+class Article extends Component {
 
   constructor(props) {
     super(props)
-    this.onBack = this.onBack.bind(this)
     const { publication, article } = this.props.match.params
-    this.key = `${publication}.${article}`
+    this.topic = this.props.article[publication + '.' + article]
+    this.onBack = this.onBack.bind(this)
+    this.onClick = this.onClick.bind(this)
   }
 
-  componentDidMount() {
-    const article = this.props.article
-    if (!article || article.key !== this.key) {
-      this.props.fetchArticle(this.props.match, this.key)
+  componentWillMount() {
+    if (!this.topic) {
+      this.props.fetchArticle(this.props.match.params)
     }
   }
 
   render() {
-    const { article } = this.props
-    if (!article || article.key !== this.key) {
+    const { publication, article } = this.props.match.params
+    this.topic = this.props.article[publication + '.' + article]
+    if (!this.topic) {
       return (
         <div></div>
       )
@@ -51,16 +52,26 @@ class Article extends React.Component {
           }
         />
         <Paper style={style} zDepth={1}>
-          <div dangerouslySetInnerHTML={(
-            { __html: article.data.html }
-          )} />
+          <article
+            dir={this.getDir(this.topic)}
+            onClick={this.onClick}
+            dangerouslySetInnerHTML={{ __html: this.topic.html }}
+          />
         </Paper>
       </div>
     )
   }
 
+  getDir(topic) {
+    return topic.baseLang.startsWith('ar') || topic.targetLang.startsWith('ar') ? 'rtl' : 'ltr'
+  }
+
   onBack() {
     this.props.history.push(`/articles/${this.props.match.params.publication}`)
+  }
+
+  onClick(ev) {
+    console.log(ev)
   }
 
 }

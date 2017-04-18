@@ -5,7 +5,6 @@
   "dependencies": {
     "axios": "^0.16.1",
     "bootstrap": "3",
-    "lru-cache": "^4.0.2",
     "material-ui": "^0.17.3",
     "prop-types": "^15.5.7",
     "react": "^15.5.4",
