@@ -5,17 +5,19 @@ import { bindActionCreators } from 'redux'
 import AppBar from 'material-ui/AppBar'
 import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
-import { List, ListItem } from 'material-ui/List'
+import { List } from 'material-ui/List'
 
+import TopicListItem from '../components/TopicListItem'
 import { fetchArticleList } from '../actions/index'
 
 class ArticleList extends React.Component {
 
   constructor(props) {
     super(props)
-    this.onBack = this.onBack.bind(this)
     const { publication } = this.props.match.params
     this.key = publication
+    this.onBack = this.onBack.bind(this)
+    this.onTouchTap = this.onTouchTap.bind(this)
   }
 
   componentWillMount() {
@@ -26,25 +28,18 @@ class ArticleList extends React.Component {
   }
 
   renderList() {
-    const articleList = this.props.articleList
+    const { articleList } = this.props
     if (!articleList || articleList.key !== this.key) {
       return (
         <div></div>
       )
     }
-    return articleList.data.slice(1).map(topic => {
-      return (
-        <ListItem
-          key={topic.id}
-          onTouchTap={() => this.onItemTap(topic)}
-          primaryText={topic.title}
-          secondaryText={
-            <p>{topic.subtitle}</p>
-          }
-          secondaryTextLines={2}
-        />
-      )
-    })
+    return articleList.data.slice(1).map(topic => (
+      <TopicListItem
+        key={topic.id}
+        topic={topic}
+        onTouchTap={this.onTouchTap} />
+    ))
   }
 
   render() {
@@ -69,7 +64,7 @@ class ArticleList extends React.Component {
     this.props.history.push('/')
   }
 
-  onItemTap(topic) {
+  onTouchTap(topic) {
     this.props.history.push(`/articles/${topic.publication}/${topic.article}`)
   }
 }

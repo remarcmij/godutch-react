@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { ListItem } from 'material-ui/List'
 
-const PublicationListItem = ({ topic, onTap }) => (
+const TopicListItem = ({ topic, onTouchTap }) => (
   <ListItem
-    onTouchTap={() => onTap(topic)}
+    onTouchTap={() => onTouchTap(topic)}
     primaryText={topic.title}
     secondaryText={
       <p>{topic.subtitle}</p>
@@ -13,9 +13,9 @@ const PublicationListItem = ({ topic, onTap }) => (
   />
 )
 
-PublicationListItem.propTypes = {
+TopicListItem.propTypes = {
   topic: PropTypes.object,
-  onItemTap: PropTypes.func
+  onTouchTap: PropTypes.func
 }
 
-export default PublicationListItem
+export default TopicListItem

@@ -34,7 +34,7 @@ class Article extends React.Component {
   }
 
   render() {
-    const article = this.props.article
+    const { article } = this.props
     if (!article || article.key !== this.key) {
       return (
         <div></div>

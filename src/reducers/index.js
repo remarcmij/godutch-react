@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux'
-import PublicationListReducer from './publicationList'
-import ArticleListReducer from './articleList'
-import ArticleReducer from './article'
+import publicationList from './publicationListReducer'
+import articleList from './articleListReducer'
+import article from './articleReducer'
 
 const rootReducer = combineReducers({
-    publicationList: PublicationListReducer,
-    articleList: ArticleListReducer,
-    article: ArticleReducer
+    publicationList,
+    articleList,
+    article
 })
 
 export default rootReducer
