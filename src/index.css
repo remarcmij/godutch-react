@@ -5,14 +5,18 @@ body {
     font-size: 1rem;
     line-height: 1.5;
     color: #373a3c;
-}
-
-strong>span {
-    cursor: pointer;
-    color: #3F51B5;
+    background-color: #fafafa;
 }
 
 .AppBar {
     position: fixed !important;
     top: 0
+}
+
+.layout-margin {
+  margin: 8px;
+}
+
+.layout-padding {
+  padding: 8px;
 }
